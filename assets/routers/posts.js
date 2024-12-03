@@ -14,17 +14,14 @@ console.log(typeof posts);
 // index
 router.get("/", (req, res) => {
     const response = getResponse([...posts]);
-    console.log(response);
     res.json(response);
 });
 // show
 router.get("/:id", (req, res) => {
-    const postTarget = getDataById(req.params.id, posts)
+    const postTarget = getDataById(req.params.id, posts);
     const response = getResponse(postTarget);
-    console.log(response);
     res.send(response);
 });
-
 // store
 router.post("/", (req, res) => {
     res.send("store operation");
@@ -39,12 +36,21 @@ router.patch("/:id", (req, res) => {
 });
 // destroy
 router.delete("/:id", (req, res) => {
-    res.send("destroy operation -> id selected: " + req.params.id);
+    let response = {};
+    const indexTarget = getDataIndexById(req.params.id, posts);
+    response = getResponse(posts[indexTarget]);
+    if (indexTarget !== -1) {
+        posts.splice(indexTarget, 1);
+    }
+    console.log(posts);
+    res.send(response);
 });
 
 module.exports = router;
-
 //* FUNCTIONS
+function getDataIndexById(idTarget, data) {
+    return data.findIndex((obj) => obj.id == idTarget);
+}
 function getDataById(idTarget, data) {
     return data.find((obj) => obj.id == idTarget);
 }
