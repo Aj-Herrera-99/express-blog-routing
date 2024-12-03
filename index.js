@@ -27,6 +27,11 @@ app.get("/", (req, res) => {
 app.use(express.static("public"));
 app.use("/posts", postsRouter);
 
+// fallback
+app.all("*", (req,res) => {
+    res.send(`<h1>404 Not Found</h1>`)
+})
+
 // server opening
 app.listen(PORT, () => {
     console.log(`Server aperto sulla porta ${PORT}
