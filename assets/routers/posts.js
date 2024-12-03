@@ -1,11 +1,26 @@
+/**
+    ### Bonus
+    - Provare a restituire la lista dei post dalla rotta index, in formato json
+    - Provare a restituire un singolo post dalla rotta show, sempre in formato json
+ */
+
 // inizialization
 const express = require("express");
+const posts = require("../db/posts.json"); // automatic parsing
 const router = express.Router();
+console.log(typeof posts)
 
 // routes
 // index
 router.get("/", (req, res) => {
-    res.send("index operation");
+    let response = {
+        operation: "index",
+        status: "ok",
+        totalCount: posts.length,
+        data: [...posts]
+    };
+    console.log(response);
+    res.json(response);
 });
 // show
 router.get("/:id", (req, res) => {
