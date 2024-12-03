@@ -5,8 +5,10 @@
  */
 
 // inizialization
+const { writeFile } = require("fs");
 const express = require("express");
 const posts = require("../db/posts.json"); // automatic parsing
+const { error } = require("console");
 const router = express.Router();
 console.log(typeof posts);
 
@@ -16,24 +18,29 @@ router.get("/", (req, res) => {
     const response = getResponse([...posts]);
     res.json(response);
 });
+
 // show
 router.get("/:id", (req, res) => {
     const postTarget = getDataById(req.params.id, posts);
     const response = getResponse(postTarget);
     res.send(response);
 });
+
 // store
 router.post("/", (req, res) => {
     res.send("store operation");
 });
+
 // update
 router.put("/:id", (req, res) => {
     res.send("update operation -> id selected: " + req.params.id);
 });
+
 // modify
 router.patch("/:id", (req, res) => {
     res.send("partial modify operation -> id selected: " + req.params.id);
 });
+
 // destroy
 router.delete("/:id", (req, res) => {
     let response = {};
@@ -41,16 +48,19 @@ router.delete("/:id", (req, res) => {
     response = getResponse(posts[indexTarget]);
     if (indexTarget !== -1) {
         posts.splice(indexTarget, 1);
+        overrideDB("assets/db/posts.json", posts, null, 4);
     }
     console.log(posts);
     res.send(response);
 });
 
 module.exports = router;
+
 //* FUNCTIONS
 function getDataIndexById(idTarget, data) {
     return data.findIndex((obj) => obj.id == idTarget);
 }
+
 function getDataById(idTarget, data) {
     return data.find((obj) => obj.id == idTarget);
 }
@@ -71,4 +81,18 @@ function getResponse(data) {
         };
     }
     return response;
+}
+
+function overrideDB(pathDB, data, replacer, space) {
+    writeFile(
+        pathDB,
+        JSON.stringify(data, replacer, space),
+        (error, result) => {
+            if (error) {
+                console.log(error);
+                return;
+            }
+            console.log("Scrittura asincrona completata");
+        }
+    );
 }
