@@ -16,11 +16,15 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 const HOST = `http://localhost:${PORT}`;
+
+const postsRouter = require("./assets/routers/posts");
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
     res.send("testing");
 });
+
+app.use("/posts", postsRouter);
 
 app.listen(PORT, () => {
     console.log(`Server aperto sulla porta ${PORT}
