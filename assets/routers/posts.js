@@ -8,7 +8,7 @@
 const express = require("express");
 const posts = require("../db/posts.json"); // automatic parsing
 const router = express.Router();
-console.log(typeof posts)
+console.log(typeof posts);
 
 // routes
 // index
@@ -17,14 +17,30 @@ router.get("/", (req, res) => {
         operation: "index",
         status: "ok",
         totalCount: posts.length,
-        data: [...posts]
+        data: [...posts],
     };
     console.log(response);
     res.json(response);
 });
 // show
 router.get("/:id", (req, res) => {
-    res.send("show operation -> id selected: " + req.params.id);
+    let response = {
+        operation: "show",
+        status: "ok",
+        totalCount: undefined,
+        data: undefined,
+    };
+    response.data = posts.find((post) => post.id == req.params.id);
+    if (response.data) {
+        response.data = [response.data];
+        response.totalCount = response.data.length;
+    } else {
+        response = {
+            404: "Not Found",
+        };
+    }
+    console.log(response);
+    res.send(response);
 });
 // store
 router.post("/", (req, res) => {
@@ -43,4 +59,4 @@ router.delete("/:id", (req, res) => {
     res.send("destroy operation -> id selected: " + req.params.id);
 });
 
-module.exports = router;    
+module.exports = router;
