@@ -13,35 +13,18 @@ console.log(typeof posts);
 // routes
 // index
 router.get("/", (req, res) => {
-    let response = {
-        operation: "index",
-        status: "ok",
-        totalCount: posts.length,
-        data: [...posts],
-    };
+    const response = getResponse([...posts]);
     console.log(response);
     res.json(response);
 });
 // show
 router.get("/:id", (req, res) => {
-    let response = {
-        operation: "show",
-        status: "ok",
-        totalCount: undefined,
-        data: undefined,
-    };
-    response.data = posts.find((post) => post.id == req.params.id);
-    if (response.data) {
-        response.data = [response.data];
-        response.totalCount = response.data.length;
-    } else {
-        response = {
-            404: "Not Found",
-        };
-    }
+    const postTarget = getDataById(req.params.id, posts)
+    const response = getResponse(postTarget);
     console.log(response);
     res.send(response);
 });
+
 // store
 router.post("/", (req, res) => {
     res.send("store operation");
@@ -60,3 +43,26 @@ router.delete("/:id", (req, res) => {
 });
 
 module.exports = router;
+
+//* FUNCTIONS
+function getDataById(idTarget, data) {
+    return data.find((obj) => obj.id == idTarget);
+}
+
+function getResponse(data) {
+    let response = {
+        status: null,
+        totalCount: null,
+        data: null,
+    };
+    if (data) {
+        response.status = "ok";
+        response.data = [].concat(data);
+        response.totalCount = response.data.length;
+    } else {
+        response = {
+            404: "Not Found",
+        };
+    }
+    return response;
+}
