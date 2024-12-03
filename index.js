@@ -12,20 +12,25 @@
     - Provare a restituire un singolo post dalla rotta show, sempre in formato json
  */
 
+// inizialization
 const express = require("express");
 const app = express();
 const PORT = 3000;
 const HOST = `http://localhost:${PORT}`;
 
+// routers
 const postsRouter = require("./assets/routers/posts");
-app.use(express.static("public"));
 
+// main logic
 app.get("/", (req, res) => {
     res.send("testing");
 });
 
+// middlewares
+app.use(express.static("public"));
 app.use("/posts", postsRouter);
 
+// server opening
 app.listen(PORT, () => {
     console.log(`Server aperto sulla porta ${PORT}
         ${HOST}`);

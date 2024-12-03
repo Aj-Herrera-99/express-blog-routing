@@ -1,8 +1,8 @@
+// inizialization
 const express = require("express");
 const router = express.Router();
 
 // routes
-
 // index
 router.get("/", (req, res) => {
     res.send("index operation");
