@@ -12,19 +12,16 @@
 // inizialization
 const express = require("express");
 const app = express();
-const PORT = 3000;
-const HOST = `http://localhost:${PORT}`;
-app.use(express.static("public"));
+const PORT = process.env.PORT;
+const HOST = process.env.HOST;
 
 // routers
 const postsRouter = require("./routers/posts");
 
-// main logic
-app.get("/", (req, res) => {
-    res.send("testing");
-});
+// static assets
+app.use(express.static("public"));
 
-// middlewares
+// API routes
 app.use("/posts", postsRouter);
 
 // fallback
