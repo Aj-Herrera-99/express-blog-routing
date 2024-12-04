@@ -14,9 +14,10 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 const HOST = `http://localhost:${PORT}`;
+app.use(express.static("public"));
 
 // routers
-const postsRouter = require("./assets/routers/posts");
+const postsRouter = require("./routers/posts");
 
 // main logic
 app.get("/", (req, res) => {
@@ -24,7 +25,6 @@ app.get("/", (req, res) => {
 });
 
 // middlewares
-app.use(express.static("public"));
 app.use("/posts", postsRouter);
 
 // fallback
